@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "c:\\Users\\maria\\COMP2084-ProjectRepo-BudgettingApp\\BudgettingApp\\BudgettingApp.csproj": {}
+    "C:\\Users\\maria\\COMP2084-ProjectRepo-BudgettingApp\\BudgettingApp\\BudgettingApp.csproj": {}
   },
   "projects": {
-    "c:\\Users\\maria\\COMP2084-ProjectRepo-BudgettingApp\\BudgettingApp\\BudgettingApp.csproj": {
+    "C:\\Users\\maria\\COMP2084-ProjectRepo-BudgettingApp\\BudgettingApp\\BudgettingApp.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "c:\\Users\\maria\\COMP2084-ProjectRepo-BudgettingApp\\BudgettingApp\\BudgettingApp.csproj",
+        "projectUniqueName": "C:\\Users\\maria\\COMP2084-ProjectRepo-BudgettingApp\\BudgettingApp\\BudgettingApp.csproj",
         "projectName": "BudgettingApp",
-        "projectPath": "c:\\Users\\maria\\COMP2084-ProjectRepo-BudgettingApp\\BudgettingApp\\BudgettingApp.csproj",
+        "projectPath": "C:\\Users\\maria\\COMP2084-ProjectRepo-BudgettingApp\\BudgettingApp\\BudgettingApp.csproj",
         "packagesPath": "C:\\Users\\maria\\.nuget\\packages\\",
-        "outputPath": "c:\\Users\\maria\\COMP2084-ProjectRepo-BudgettingApp\\BudgettingApp\\obj\\",
+        "outputPath": "C:\\Users\\maria\\COMP2084-ProjectRepo-BudgettingApp\\BudgettingApp\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\maria\\AppData\\Roaming\\NuGet\\NuGet.Config"

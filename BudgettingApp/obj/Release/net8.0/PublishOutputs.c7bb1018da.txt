@@ -1,7 +1,0 @@
-C:\Users\maria\COMP2084-ProjectRepo-BudgettingApp\BudgettingApp\bin\Release\net8.0\publish\BudgettingApp.exe
-C:\Users\maria\COMP2084-ProjectRepo-BudgettingApp\BudgettingApp\bin\Release\net8.0\publish\appsettings.Development.json
-C:\Users\maria\COMP2084-ProjectRepo-BudgettingApp\BudgettingApp\bin\Release\net8.0\publish\appsettings.json
-C:\Users\maria\COMP2084-ProjectRepo-BudgettingApp\BudgettingApp\bin\Release\net8.0\publish\BudgettingApp.dll
-C:\Users\maria\COMP2084-ProjectRepo-BudgettingApp\BudgettingApp\bin\Release\net8.0\publish\BudgettingApp.deps.json
-C:\Users\maria\COMP2084-ProjectRepo-BudgettingApp\BudgettingApp\bin\Release\net8.0\publish\BudgettingApp.runtimeconfig.json
-C:\Users\maria\COMP2084-ProjectRepo-BudgettingApp\BudgettingApp\bin\Release\net8.0\publish\BudgettingApp.pdb

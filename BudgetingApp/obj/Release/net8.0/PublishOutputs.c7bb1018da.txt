@@ -1,0 +1,7 @@
+C:\Users\maria\COMP2084-ProjectRepo-budgetingApp\budgetingApp\bin\Release\net8.0\publish\budgetingApp.exe
+C:\Users\maria\COMP2084-ProjectRepo-budgetingApp\budgetingApp\bin\Release\net8.0\publish\appsettings.Development.json
+C:\Users\maria\COMP2084-ProjectRepo-budgetingApp\budgetingApp\bin\Release\net8.0\publish\appsettings.json
+C:\Users\maria\COMP2084-ProjectRepo-budgetingApp\budgetingApp\bin\Release\net8.0\publish\budgetingApp.dll
+C:\Users\maria\COMP2084-ProjectRepo-budgetingApp\budgetingApp\bin\Release\net8.0\publish\budgetingApp.deps.json
+C:\Users\maria\COMP2084-ProjectRepo-budgetingApp\budgetingApp\bin\Release\net8.0\publish\budgetingApp.runtimeconfig.json
+C:\Users\maria\COMP2084-ProjectRepo-budgetingApp\budgetingApp\bin\Release\net8.0\publish\budgetingApp.pdb

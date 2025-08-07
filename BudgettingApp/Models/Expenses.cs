@@ -1,4 +1,6 @@
-
+// Expense.cs
+// This file defines the Expense model for the BudgettingApp application.
+// An Expense represents a single expense, including its name, amount, date, and associated category.
 
 // Import necessary namespaces 
 

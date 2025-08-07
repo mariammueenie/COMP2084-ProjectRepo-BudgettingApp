@@ -1,0 +1,9 @@
+C:\Users\maria\COMP2084-ProjectRepo-BudgettingApp\BudgetingApp\obj\Debug\net8.0\BudgetingApp.csproj.AssemblyReference.cache
+C:\Users\maria\COMP2084-ProjectRepo-BudgettingApp\BudgetingApp\obj\Debug\net8.0\BudgetingApp.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\maria\COMP2084-ProjectRepo-BudgettingApp\BudgetingApp\obj\Debug\net8.0\BudgetingApp.AssemblyInfoInputs.cache
+C:\Users\maria\COMP2084-ProjectRepo-BudgettingApp\BudgetingApp\obj\Debug\net8.0\BudgetingApp.AssemblyInfo.cs
+C:\Users\maria\COMP2084-ProjectRepo-BudgettingApp\BudgetingApp\obj\Debug\net8.0\BudgetingApp.csproj.CoreCompileInputs.cache
+C:\Users\maria\COMP2084-ProjectRepo-BudgettingApp\BudgetingApp\obj\Debug\net8.0\BudgetingApp.MvcApplicationPartsAssemblyInfo.cache
+C:\Users\maria\COMP2084-ProjectRepo-BudgettingApp\BudgetingApp\obj\Debug\net8.0\BudgetingApp.RazorAssemblyInfo.cache
+C:\Users\maria\COMP2084-ProjectRepo-BudgettingApp\BudgetingApp\obj\Debug\net8.0\BudgetingApp.RazorAssemblyInfo.cs
+C:\Users\maria\COMP2084-ProjectRepo-BudgettingApp\BudgetingApp\obj\Debug\net8.0\BudgetingApp.sourcelink.json

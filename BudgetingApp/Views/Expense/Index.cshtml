@@ -1,15 +1,18 @@
+
 @model IEnumerable<BudgetingApp.Models.Expense>
 
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "Expenses";
 }
 
-<h1>Index</h1>
+<h1>Expenses</h1>
 
 <p>
-    <a asp-action="Create">Create New</a>
+    <!-- Link to create a new expense -->
+    <a asp-action="Create" class="btn btn-primary">Create New Expense</a>
 </p>
-<table class="table">
+
+<table class="table table-striped">
     <thead>
         <tr>
             <th>
@@ -24,30 +27,31 @@
             <th>
                 @Html.DisplayNameFor(model => model.Category)
             </th>
-            <th></th>
+            <th>Actions</th>
         </tr>
     </thead>
     <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.Name)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Amount)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Date)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Category.Name)
-            </td>
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.ExpenseId">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.ExpenseId">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.ExpenseId">Delete</a>
-            </td>
-        </tr>
-}
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>@item.Name</td>
+
+                <!-- Format amount as currency (e.g., $123.45) -->
+                <td>@String.Format("{0:C}", item.Amount)</td>
+
+                <!-- Format date nicely -->
+                <td>@item.Date.ToShortDateString()</td>
+
+                <!-- Safely access category name -->
+                <td>@item.Category?.Name</td>
+
+                <td>
+                    <!-- Action links -->
+                    <a asp-action="Edit" asp-route-id="@item.ExpenseId" class="btn btn-sm btn-warning">Edit</a>
+                    <a asp-action="Details" asp-route-id="@item.ExpenseId" class="btn btn-sm btn-info">Details</a>
+                    <a asp-action="Delete" asp-route-id="@item.ExpenseId" class="btn btn-sm btn-danger">Delete</a>
+                </td>
+            </tr>
+        }
     </tbody>
 </table>

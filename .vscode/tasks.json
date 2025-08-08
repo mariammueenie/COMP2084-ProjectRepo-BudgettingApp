@@ -7,7 +7,7 @@
 			"type": "process",
 			"args": [
 				"clean",
-				"${workspaceFolder}/budgetingApp",
+				"${workspaceFolder}/BudgetingApp",
 				"/property:GenerateFullPaths=true",
 				"/consoleloggerparameters:NoSummary"
 			],
@@ -19,7 +19,7 @@
 			"type": "process",
 			"args": [
 				"publish",
-				"${workspaceFolder}/budgetingApp",
+				"${workspaceFolder}/BudgetingApp",
 				"--configuration",
 				"Release",
 				"/property:GenerateFullPaths=true",

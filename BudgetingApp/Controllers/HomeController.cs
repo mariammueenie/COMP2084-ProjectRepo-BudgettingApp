@@ -1,8 +1,8 @@
 using System.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
-using budgetingApp.Models;
+using BudgetingApp.Models;
 
-namespace budgetingApp.Controllers;
+namespace BudgetingApp.Controllers;
 
 public class HomeController : Controller
 {

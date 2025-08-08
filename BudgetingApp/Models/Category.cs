@@ -25,10 +25,14 @@ namespace BudgetingApp.Models
         [StringLength(120, ErrorMessage = "Category name cannot exceed 120 characters.")]
         [Display(Name = "Category Name")]
 
-        public string Name { get; set; }
+        public string Name { get; set; } = string.Empty;
+
+        // The property holds the expenses that belong to this category.
+        // It's initialized to an empty list to avoid null reference exceptions.
+        // This will allow for easy addition and removal of expenses from the category.
 
         // This is a navigation property that allows us to access the expenses associated with this category.
         // Relationship: One to Many (ie: One Category can have Many Expenses)
-        public ICollection<Expense> Expenses { get; set; }
+        public ICollection<Expense> Expenses { get; set; } = new List<Expense>(); 
     }
 }

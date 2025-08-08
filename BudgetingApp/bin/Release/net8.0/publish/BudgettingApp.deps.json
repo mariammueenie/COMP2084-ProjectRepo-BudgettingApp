@@ -6,15 +6,15 @@
   "compilationOptions": {},
   "targets": {
     ".NETCoreApp,Version=v8.0": {
-      "budgetingApp/1.0.0": {
+      "BudgetingApp/1.0.0": {
         "runtime": {
-          "budgetingApp.dll": {}
+          "BudgetingApp.dll": {}
         }
       }
     }
   },
   "libraries": {
-    "budgetingApp/1.0.0": {
+    "BudgetingApp/1.0.0": {
       "type": "project",
       "serviceable": false,
       "sha512": ""

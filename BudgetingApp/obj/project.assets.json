@@ -2840,11 +2840,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\maria\\COMP2084-ProjectRepo-BudgettingApp\\BudgetingApp\\BudgetingApp.csproj",
+      "projectUniqueName": "C:\\Users\\maria\\COMP2084-ProjectRepo-BudgetingApp\\BudgetingApp\\BudgetingApp.csproj",
       "projectName": "BudgetingApp",
-      "projectPath": "C:\\Users\\maria\\COMP2084-ProjectRepo-BudgettingApp\\BudgetingApp\\BudgetingApp.csproj",
+      "projectPath": "C:\\Users\\maria\\COMP2084-ProjectRepo-BudgetingApp\\BudgetingApp\\BudgetingApp.csproj",
       "packagesPath": "C:\\Users\\maria\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\maria\\COMP2084-ProjectRepo-BudgettingApp\\BudgetingApp\\obj\\",
+      "outputPath": "C:\\Users\\maria\\COMP2084-ProjectRepo-BudgetingApp\\BudgetingApp\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
         "C:\\Users\\maria\\AppData\\Roaming\\NuGet\\NuGet.Config"

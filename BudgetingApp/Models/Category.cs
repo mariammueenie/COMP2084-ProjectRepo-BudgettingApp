@@ -1,6 +1,6 @@
 // BudgetingApp.Models.Category.cs
 // This file defines the Category model for the BudgetingApp.
-// It includes properties for the category ID, name, and a collection of associated expenses.
+// It includes properties for the category ID, name, and a collection of associated expense.
 
 
 // Import necessary namespaces 
@@ -11,7 +11,7 @@ using System.ComponentModel.DataAnnotations; // needed for validation and displa
 namespace BudgetingApp.Models 
 
 {
-    // This class represents a 'category' of expenses (Like Food, Rent, Entertainment, Car Insurance, etc.)
+    // This class represents a 'category' of expense (Like Food, Rent, Entertainment, Car Insurance, etc.)
     public class Category
     {
         // This is the primary key for the Category Table 
@@ -27,12 +27,12 @@ namespace BudgetingApp.Models
 
         public string Name { get; set; } = string.Empty;
 
-        // The property holds the expenses that belong to this category.
+        // The property holds the expense that belong to this category.
         // It's initialized to an empty list to avoid null reference exceptions.
-        // This will allow for easy addition and removal of expenses from the category.
+        // This will allow for easy addition and removal of expense from the category.
 
-        // This is a navigation property that allows us to access the expenses associated with this category.
-        // Relationship: One to Many (ie: One Category can have Many Expenses)
-        public ICollection<Expense> Expenses { get; set; } = new List<Expense>(); 
+        // This is a navigation property that allows us to access the expense associated with this category.
+        // Relationship: One to Many (ie: One Category can have Many Expense)
+        public ICollection<Expense> Expense { get; set; } = new List<Expense>(); 
     }
 }

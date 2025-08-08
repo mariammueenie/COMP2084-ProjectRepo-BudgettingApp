@@ -170,7 +170,7 @@ namespace BudgetingApp.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Expenses",
+                name: "Expense",
                 columns: table => new
                 {
                     ExpenseId = table.Column<int>(type: "int", nullable: false)
@@ -182,9 +182,9 @@ namespace BudgetingApp.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Expenses", x => x.ExpenseId);
+                    table.PrimaryKey("PK_Expense", x => x.ExpenseId);
                     table.ForeignKey(
-                        name: "FK_Expenses_Categories_CategoryId",
+                        name: "FK_Expense_Categories_CategoryId",
                         column: x => x.CategoryId,
                         principalTable: "Categories",
                         principalColumn: "CategoryId",
@@ -231,8 +231,8 @@ namespace BudgetingApp.Migrations
                 filter: "[NormalizedUserName] IS NOT NULL");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Expenses_CategoryId",
-                table: "Expenses",
+                name: "IX_Expense_CategoryId",
+                table: "Expense",
                 column: "CategoryId");
         }
 
@@ -255,7 +255,7 @@ namespace BudgetingApp.Migrations
                 name: "AspNetUserTokens");
 
             migrationBuilder.DropTable(
-                name: "Expenses");
+                name: "Expense");
 
             migrationBuilder.DropTable(
                 name: "AspNetRoles");

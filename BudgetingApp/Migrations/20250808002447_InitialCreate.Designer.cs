@@ -68,7 +68,7 @@ namespace BudgetingApp.Migrations
 
                     b.HasIndex("CategoryId");
 
-                    b.ToTable("Expenses");
+                    b.ToTable("Expense");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
@@ -272,7 +272,7 @@ namespace BudgetingApp.Migrations
             modelBuilder.Entity("BudgetingApp.Models.Expense", b =>
                 {
                     b.HasOne("BudgetingApp.Models.Category", "Category")
-                        .WithMany("Expenses")
+                        .WithMany("Expense")
                         .HasForeignKey("CategoryId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -333,7 +333,7 @@ namespace BudgetingApp.Migrations
 
             modelBuilder.Entity("BudgetingApp.Models.Category", b =>
                 {
-                    b.Navigation("Expenses");
+                    b.Navigation("Expense");
                 });
 #pragma warning restore 612, 618
         }

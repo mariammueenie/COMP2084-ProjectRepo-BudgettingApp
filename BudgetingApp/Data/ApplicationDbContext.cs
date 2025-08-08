@@ -18,6 +18,7 @@ namespace BudgetingApp.Data
     {
         // Constructor that takes DbContextOptions to pass options to base class.
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
+        : base(options)
         {
             // just chilling for now
         }
@@ -27,6 +28,16 @@ namespace BudgetingApp.Data
 
         // This line tells EF Core to create a table for the Category Model.
         public DbSet<Category> Categories { get; set; }
+
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            base.OnModelCreating(modelBuilder);
+
+            modelBuilder.Entity<Expense>()
+                .Property(e => e.Amount)
+                .HasPrecision(10, 2); // Total 10 digits, 2 after decimal
+        }
+
 
         // This line tells EF Core to create a table for the Budget Model.
         // public DbSet<Budget> Budgets { get; set; }

@@ -19,7 +19,7 @@ namespace BudgetingApp.Models
         // Name of Expense. Required field, max length 120 characters
         [Required(ErrorMessage = "Expense Name is required.")]
         [Display(Name = "Expense Name")]
-        public string Name { get; set; }
+        public string Name { get; set; } = string.Empty; 
 
         // $$$ Dollar amount of the expense. Must be greater than 0. 
         // The [Range] attribute ensures the value is within a valid range. 
@@ -33,12 +33,12 @@ namespace BudgetingApp.Models
         public DateTime Data { get; set; }
 
         // Insures each expense belongs to a category (like Food, Rent, Entertainment, etc.)
-        // Foreign key relationship to Category table
+        // Foreign key relationship to Category table.
         [Display(Name = "Category")]
         public int CategoryId { get; set; }
 
         // This is a navigation property that allows us to ACCESS the Category associated with this expense. 
-        [ForeignKey("CategoryId")] // Tells database to use CategoryId as the foreign key
-        public Category Category { get; set; }
+        [ForeignKey("CategoryId")] // Tells database to use CategoryId as the foreign key.
+        public Category Category { get; set; } = new Category(); // Initialized to avoid null reference exceptions.
     }
 }

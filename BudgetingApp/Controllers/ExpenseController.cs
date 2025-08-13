@@ -103,19 +103,17 @@ namespace BudgetingApp.Controllers
 
 // temp, for troubleshooting, from openstax
 Console.WriteLine($"ModelState is valid: {ModelState.IsValid}");
-foreach (var modelStateKey in ModelState.Keys)
-{
-    var value = ModelState[modelStateKey];
-    foreach (var error in value.Errors)
-    {
-        Console.WriteLine($"Key: {modelStateKey}, Error: {error.ErrorMessage}");
-    }
-}
-
-
-
-
-
+            foreach (var modelStateKey in ModelState.Keys)
+            {
+                var value = ModelState[modelStateKey];
+                if (value != null) // Prevents possible null dereference.
+                {
+                    foreach (var error in value.Errors)
+                    { 
+                        Console.WriteLine($"Key: {modelStateKey}, Error: {error.ErrorMessage}");
+                    }
+                }
+            }
             if (ModelState.IsValid)
             {
                 try
@@ -165,18 +163,23 @@ foreach (var modelStateKey in ModelState.Keys)
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
+            // Make sure the expenses table is not null.
             if (_context.Expenses == null)
             {
                 return Problem("Entity set 'ApplicationDbContext.Expenses' is null.");
             }
 
+            // Find the expense using id.
             var expense = await _context.Expenses.FindAsync(id);
+
+            // If null expense exists, remove it. Prevents null reference exceptions.
             if (expense != null)
             {
                 _context.Expenses.Remove(expense);
+                await _context.SaveChangesAsync();
             }
 
-            await _context.SaveChangesAsync();
+            // Redirect to updated list of expenses after null deletion.
             return RedirectToAction(nameof(Index));
         }
 

@@ -1,5 +1,16 @@
 {
     "appService.preDeployTask": "publish-release",
     "appService.deploySubpath": "BudgetingApp\\bin\\Release\\net8.0\\publish",
-    "appService.defaultWebAppToDeploy": "/subscriptions/6f1d0e41-f391-4a31-bc49-c6a7abadb9d6/resourceGroups/COMP2084App/providers/Microsoft.Web/sites/COMP2084APP"
+    "appService.defaultWebAppToDeploy": "/subscriptions/6f1d0e41-f391-4a31-bc49-c6a7abadb9d6/resourceGroups/COMP2084App/providers/Microsoft.Web/sites/COMP2084APP",
+    "cSpell.words": [
+        "Candel",
+        "favicons",
+        "HSTS",
+        "localdb",
+        "Mariam",
+        "Mueen",
+        "Shakhboz",
+        "Soliev",
+        "wwwroot"
+    ]
 }

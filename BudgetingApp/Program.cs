@@ -29,7 +29,7 @@ builder.Services
     // .AddDefaultTokenProviders() // Add token providers for password reset, email confirmation, etc.
     .AddDefaultUI();
 // Add default UI for Identity (login, register, etc.)
-// This is optional but provides a basic UI for user management.
+// This provides basic UI for users.
 // Reference: https://learn.microsoft.com/en-us/dotnet/api/microsoft.aspnetcore.identity.identitybuilderuiextensions.adddefaultui?view=aspnetcore-9.0
 // Reference: https://medium.com/@ashrafulislam_1167/getting-started-with-asp-net-core-identity-in-an-mvc-project-a-beginners-guide-4d804ed79183
 
@@ -38,8 +38,8 @@ builder.Services
     .AddAuthentication()
     .AddGoogle(options =>
     {
-        options.ClientId = builder.Configuration["Authentication:Google:ClientId"] ?? "";
-        options.ClientSecret = builder.Configuration["Authentication:Google:ClientSecret"] ?? "";
+        options.ClientId = builder.Configuration["Authentication:Google:ClientId"]!;
+        options.ClientSecret = builder.Configuration["Authentication:Google:ClientSecret"]!;
 
     });
 

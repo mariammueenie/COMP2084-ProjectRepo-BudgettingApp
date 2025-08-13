@@ -1,5 +1,3 @@
-using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
@@ -14,12 +12,14 @@ namespace BudgetingApp.Controllers
     {
         private readonly ApplicationDbContext _context;
 
+        // Injecting the database context into the controller
         public ExpenseController(ApplicationDbContext context)
         {
             _context = context;
         }
 
         // GET: Expense
+        // Lists all expenses with their associated categories
         public async Task<IActionResult> Index()
         {
             var applicationDbContext = _context.Expenses.Include(e => e.Category);
@@ -27,9 +27,10 @@ namespace BudgetingApp.Controllers
         }
 
         // GET: Expense/Details/5
+        // Shows the full details of a single expense
         public async Task<IActionResult> Details(int? id)
         {
-            if (id == null)
+            if (id == null || _context.Expenses == null)
             {
                 return NotFound();
             }
@@ -46,15 +47,16 @@ namespace BudgetingApp.Controllers
         }
 
         // GET: Expense/Create
+        // Renders the form to create a new expense
         public IActionResult Create()
         {
+            // Populates the dropdown list for Category
             ViewData["CategoryId"] = new SelectList(_context.Categories, "CategoryId", "Name");
             return View();
         }
 
         // POST: Expense/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
+        // Processes the form submission to create a new expense
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("ExpenseId,Name,Amount,Date,CategoryId")] Expense expense)
@@ -65,6 +67,8 @@ namespace BudgetingApp.Controllers
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
+
+            // Re-populate dropdown if form validation fails
             ViewData["CategoryId"] = new SelectList(_context.Categories, "CategoryId", "Name", expense.CategoryId);
             return View(expense);
         }
@@ -72,7 +76,7 @@ namespace BudgetingApp.Controllers
         // GET: Expense/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
-            if (id == null)
+            if (id == null || _context.Expenses == null)
             {
                 return NotFound();
             }
@@ -82,13 +86,12 @@ namespace BudgetingApp.Controllers
             {
                 return NotFound();
             }
+
             ViewData["CategoryId"] = new SelectList(_context.Categories, "CategoryId", "Name", expense.CategoryId);
             return View(expense);
         }
 
         // POST: Expense/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("ExpenseId,Name,Amount,Date,CategoryId")] Expense expense)
@@ -97,6 +100,21 @@ namespace BudgetingApp.Controllers
             {
                 return NotFound();
             }
+
+// temp, for troubleshooting, from openstax
+Console.WriteLine($"ModelState is valid: {ModelState.IsValid}");
+foreach (var modelStateKey in ModelState.Keys)
+{
+    var value = ModelState[modelStateKey];
+    foreach (var error in value.Errors)
+    {
+        Console.WriteLine($"Key: {modelStateKey}, Error: {error.ErrorMessage}");
+    }
+}
+
+
+
+
 
             if (ModelState.IsValid)
             {
@@ -118,6 +136,7 @@ namespace BudgetingApp.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
+
             ViewData["CategoryId"] = new SelectList(_context.Categories, "CategoryId", "Name", expense.CategoryId);
             return View(expense);
         }
@@ -125,7 +144,7 @@ namespace BudgetingApp.Controllers
         // GET: Expense/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
-            if (id == null)
+            if (id == null || _context.Expenses == null)
             {
                 return NotFound();
             }
@@ -146,6 +165,11 @@ namespace BudgetingApp.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
+            if (_context.Expenses == null)
+            {
+                return Problem("Entity set 'ApplicationDbContext.Expenses' is null.");
+            }
+
             var expense = await _context.Expenses.FindAsync(id);
             if (expense != null)
             {
@@ -156,9 +180,11 @@ namespace BudgetingApp.Controllers
             return RedirectToAction(nameof(Index));
         }
 
+        // Helper method to check if an expense exists in the database
         private bool ExpenseExists(int id)
         {
             return _context.Expenses.Any(e => e.ExpenseId == id);
         }
     }
 }
+

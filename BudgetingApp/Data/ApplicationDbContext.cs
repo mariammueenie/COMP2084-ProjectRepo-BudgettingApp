@@ -30,14 +30,22 @@ namespace BudgetingApp.Data
         public DbSet<Category> Categories { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
-        {
-            base.OnModelCreating(modelBuilder);
+{
+    base.OnModelCreating(modelBuilder);
 
-            modelBuilder.Entity<Expense>()
-                .Property(e => e.Amount)
-                .HasPrecision(10, 2); // Total 10 digits, 2 after decimal
-        }
+    modelBuilder.Entity<Expense>()
+        .Property(e => e.Amount)
+        .HasPrecision(10, 2); // Total 10 digits, 2 after decimal
 
+    modelBuilder.Entity<Income>()
+        .Property(i => i.Amount)
+        .HasPrecision(10, 2); // Total 10 digits, 2 after decimal
+}
+
+
+        // this line is for the income model
+public DbSet<Income> Incomes { get; set; }
+        // This line tells EF Core to create a table for the Income Model.
 
         // This line tells EF Core to create a table for the Budget Model.
         // public DbSet<Budget> Budgets { get; set; }

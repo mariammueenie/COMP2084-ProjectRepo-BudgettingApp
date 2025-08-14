@@ -33,15 +33,15 @@ builder.Services
 // Reference: https://learn.microsoft.com/en-us/dotnet/api/microsoft.aspnetcore.identity.identitybuilderuiextensions.adddefaultui?view=aspnetcore-9.0
 // Reference: https://medium.com/@ashrafulislam_1167/getting-started-with-asp-net-core-identity-in-an-mvc-project-a-beginners-guide-4d804ed79183
 
-// Google Authentication configuration. 
-builder.Services
-    .AddAuthentication()
-    .AddGoogle(options =>
-    {
-        options.ClientId = builder.Configuration["Authentication:Google:ClientId"]!;
-        options.ClientSecret = builder.Configuration["Authentication:Google:ClientSecret"]!;
+// // Google Authentication configuration. 
+// builder.Services
+//     .AddAuthentication()
+//     .AddGoogle(options =>
+//     {
+//         options.ClientId = builder.Configuration["Authentication:Google:ClientId"]!;
+//         options.ClientSecret = builder.Configuration["Authentication:Google:ClientSecret"]!;
 
-    });
+//     });
 
 // disable google keys temporarily, so it only runs if keys are actually present!
 // BEFORE app.Build();

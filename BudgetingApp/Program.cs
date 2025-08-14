@@ -54,6 +54,78 @@ builder.Services
 
 var app = builder.Build();
 
+// TEMPORARY
+// ===== SEED ROLES + ADMIN USER ON STARTUP =====
+await using (var scope = app.Services.CreateAsyncScope())
+{
+    var services = scope.ServiceProvider;
+
+    try
+    {
+        var roleManager = services.GetRequiredService<RoleManager<IdentityRole>>();
+        var userManager = services.GetRequiredService<UserManager<IdentityUser>>();
+
+        // Ensure roles exist
+        string[] roles = new[] { "Admin", "Customer" };
+        foreach (var roleName in roles)
+        {
+            if (!await roleManager.RoleExistsAsync(roleName))
+            {
+                var r = await roleManager.CreateAsync(new IdentityRole(roleName));
+                if (!r.Succeeded)
+                {
+                    throw new Exception("Failed creating role '" + roleName + "': " +
+                        string.Join("; ", r.Errors.Select(e => e.Description)));
+                }
+            }
+        }
+
+        // Ensure admin user exists
+        var adminEmail = "dario@gc.ca";
+        var adminUser = await userManager.FindByEmailAsync(adminEmail);
+        if (adminUser == null)
+        {
+            adminUser = new IdentityUser
+            {
+                UserName = adminEmail,
+                Email = adminEmail,
+                EmailConfirmed = true
+            };
+
+            var create = await userManager.CreateAsync(adminUser, "Test123$");
+            if (!create.Succeeded)
+            {
+                throw new Exception("Failed creating admin user: " +
+                    string.Join("; ", create.Errors.Select(e => e.Description)));
+            }
+        }
+
+        // Ensure admin is in Admin role
+        if (!await userManager.IsInRoleAsync(adminUser, "Admin"))
+        {
+            var addRole = await userManager.AddToRoleAsync(adminUser, "Admin");
+            if (!addRole.Succeeded)
+            {
+                throw new Exception("Failed adding admin to role: " +
+                    string.Join("; ", addRole.Errors.Select(e => e.Description)));
+            }
+        }
+
+        Console.WriteLine("✅ Seed complete: roles + dario@gc.ca (Admin).");
+    }
+    catch (Exception ex)
+    {
+        Console.WriteLine("❌ Seed error: " + ex.Message);
+    }
+}
+// ===== END SEED =====
+
+
+
+
+
+
+
 // Pipeline
 if (!app.Environment.IsDevelopment())
 {
@@ -85,25 +157,6 @@ app.MapControllerRoute(
 
 // Map Razor Pages if/when needed.
 app.MapRazorPages();
-
-// temp 
-// var adminEmail = "dario@gc.ca";
-// var adminPass = "Test123!";
-// var adminUser = await UserManager.FindByEmailAsync(adminEmail);
-// if (adminUser == null)
-// {
-//     adminUser = new IdentityUser
-//     {
-//         UserName = adminEmail,
-//         Email = adminEmail,
-//         EmailConfirmed = true
-//     };
-//     var created = await UserManager.CreateAsynch(adminUser, adminPass);
-//     if (created.Succeeded)
-//     {
-//         await UserManager.AddToRoleAsynch(adminUser, "Administrator");
-//     }
-
 
 // Self explanatory.
 app.Run();

@@ -9,7 +9,9 @@ C:\Users\maria\COMP2084-ProjectRepo-BudgetingApp\BudgetingApp\bin\Debug\net8.0\B
 C:\Users\maria\COMP2084-ProjectRepo-BudgetingApp\BudgetingApp\bin\Debug\net8.0\Azure.Core.dll
 C:\Users\maria\COMP2084-ProjectRepo-BudgetingApp\BudgetingApp\bin\Debug\net8.0\Azure.Identity.dll
 C:\Users\maria\COMP2084-ProjectRepo-BudgetingApp\BudgetingApp\bin\Debug\net8.0\Humanizer.dll
+C:\Users\maria\COMP2084-ProjectRepo-BudgetingApp\BudgetingApp\bin\Debug\net8.0\Microsoft.AspNetCore.Authentication.Google.dll
 C:\Users\maria\COMP2084-ProjectRepo-BudgetingApp\BudgetingApp\bin\Debug\net8.0\Microsoft.AspNetCore.Identity.EntityFrameworkCore.dll
+C:\Users\maria\COMP2084-ProjectRepo-BudgetingApp\BudgetingApp\bin\Debug\net8.0\Microsoft.AspNetCore.Identity.UI.dll
 C:\Users\maria\COMP2084-ProjectRepo-BudgetingApp\BudgetingApp\bin\Debug\net8.0\Microsoft.AspNetCore.Razor.Language.dll
 C:\Users\maria\COMP2084-ProjectRepo-BudgetingApp\BudgetingApp\bin\Debug\net8.0\Microsoft.Bcl.AsyncInterfaces.dll
 C:\Users\maria\COMP2084-ProjectRepo-BudgetingApp\BudgetingApp\bin\Debug\net8.0\Microsoft.Build.dll
@@ -232,6 +234,7 @@ C:\Users\maria\COMP2084-ProjectRepo-BudgetingApp\BudgetingApp\obj\Debug\net8.0\B
 C:\Users\maria\COMP2084-ProjectRepo-BudgetingApp\BudgetingApp\obj\Debug\net8.0\BudgetingApp.AssemblyInfoInputs.cache
 C:\Users\maria\COMP2084-ProjectRepo-BudgetingApp\BudgetingApp\obj\Debug\net8.0\BudgetingApp.AssemblyInfo.cs
 C:\Users\maria\COMP2084-ProjectRepo-BudgetingApp\BudgetingApp\obj\Debug\net8.0\BudgetingApp.csproj.CoreCompileInputs.cache
+C:\Users\maria\COMP2084-ProjectRepo-BudgetingApp\BudgetingApp\obj\Debug\net8.0\BudgetingApp.MvcApplicationPartsAssemblyInfo.cs
 C:\Users\maria\COMP2084-ProjectRepo-BudgetingApp\BudgetingApp\obj\Debug\net8.0\BudgetingApp.MvcApplicationPartsAssemblyInfo.cache
 C:\Users\maria\COMP2084-ProjectRepo-BudgetingApp\BudgetingApp\obj\Debug\net8.0\BudgetingApp.RazorAssemblyInfo.cache
 C:\Users\maria\COMP2084-ProjectRepo-BudgetingApp\BudgetingApp\obj\Debug\net8.0\BudgetingApp.RazorAssemblyInfo.cs
@@ -252,6 +255,3 @@ C:\Users\maria\COMP2084-ProjectRepo-BudgetingApp\BudgetingApp\obj\Debug\net8.0\r
 C:\Users\maria\COMP2084-ProjectRepo-BudgetingApp\BudgetingApp\obj\Debug\net8.0\BudgetingApp.pdb
 C:\Users\maria\COMP2084-ProjectRepo-BudgetingApp\BudgetingApp\obj\Debug\net8.0\BudgetingApp.genruntimeconfig.cache
 C:\Users\maria\COMP2084-ProjectRepo-BudgetingApp\BudgetingApp\obj\Debug\net8.0\ref\BudgetingApp.dll
-C:\Users\maria\COMP2084-ProjectRepo-BudgetingApp\BudgetingApp\obj\Debug\net8.0\BudgetingApp.MvcApplicationPartsAssemblyInfo.cs
-C:\Users\maria\COMP2084-ProjectRepo-BudgetingApp\BudgetingApp\bin\Debug\net8.0\Microsoft.AspNetCore.Authentication.Google.dll
-C:\Users\maria\COMP2084-ProjectRepo-BudgetingApp\BudgetingApp\bin\Debug\net8.0\Microsoft.AspNetCore.Identity.UI.dll

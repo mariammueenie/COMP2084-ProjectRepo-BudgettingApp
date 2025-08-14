@@ -86,5 +86,24 @@ app.MapControllerRoute(
 // Map Razor Pages if/when needed.
 app.MapRazorPages();
 
+// temp 
+// var adminEmail = "dario@gc.ca";
+// var adminPass = "Test123!";
+// var adminUser = await UserManager.FindByEmailAsync(adminEmail);
+// if (adminUser == null)
+// {
+//     adminUser = new IdentityUser
+//     {
+//         UserName = adminEmail,
+//         Email = adminEmail,
+//         EmailConfirmed = true
+//     };
+//     var created = await UserManager.CreateAsynch(adminUser, adminPass);
+//     if (created.Succeeded)
+//     {
+//         await UserManager.AddToRoleAsynch(adminUser, "Administrator");
+//     }
+
+
 // Self explanatory.
 app.Run();

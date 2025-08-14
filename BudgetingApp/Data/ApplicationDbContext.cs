@@ -31,7 +31,7 @@ namespace BudgetingApp.Data
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
 {
-    base.OnModelCreating(modelBuilder);
+    base.OnModelCreating(modelBuilder); 
 
     modelBuilder.Entity<Expense>()
         .Property(e => e.Amount)

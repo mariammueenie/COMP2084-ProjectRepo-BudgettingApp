@@ -43,16 +43,41 @@ builder.Services
 
     });
 
+// disable google keys temporarily, so it only runs if keys are actually present!
+// BEFORE app.Build();
+var googleId     = builder.Configuration["Authentication:Google:ClientId"];
+var googleSecret = builder.Configuration["Authentication:Google:ClientSecret"];
+
+if (!string.IsNullOrWhiteSpace(googleId) && !string.IsNullOrWhiteSpace(googleSecret))
+{
+    builder.Services
+        .AddAuthentication()
+        .AddGoogle(options =>
+        {
+            options.ClientId = googleId!;
+            options.ClientSecret = googleSecret!;
+        });
+}
+// If keys are missing, Google is simply not added and won’t break startup.
+// If keys are present, Google authentication is added to the app.
 
 // Configure HTTP request pipeline, plus error handling.
-   // if (!app.Environment.IsDevelopment())
+// if (!app.Environment.IsDevelopment())
 //    {
-  //      app.UseExceptionHandler("/Home/Error");
-        // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
-    //    app.UseHsts();
-    // }
+//      app.UseExceptionHandler("/Home/Error");
+// The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
+//    app.UseHsts();
+// }
 
 var app = builder.Build();
+
+// TEMP TO MAKE SURE DB IS CREATED
+using (var scope = app.Services.CreateScope())
+{
+    var db = scope.ServiceProvider.GetRequiredService<BudgetingApp.Data.ApplicationDbContext>();
+    db.Database.Migrate();
+}
+
 
 // TEMPORARY
 // ===== SEED ROLES + ADMIN USER ON STARTUP =====

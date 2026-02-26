@@ -1,4 +1,4 @@
-
+// Comment here :)
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Identity; 
 using BudgetingApp.Data;

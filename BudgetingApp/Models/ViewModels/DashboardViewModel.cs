@@ -3,66 +3,66 @@
 // instead of passing randomly, everything dashboard needs is grouped here
 // keeps controller clean, view strongly typed
 
-using System // need DateTime
-using System.Collections.Generic // need List collections
+using System; // need DateTime
+using System.Collections.Generic; // need List collections
 
-namespace BudgetingApp.Models.ViewModels // separate namespace for ViewModels to keep architecture clean
+namespace BudgetingApp.Models.ViewModels; // file-scoped namespace (C# 10+)
+
+public class DashboardViewModel
 {
-    public class DashboardViewModel
-    {
-        // month currently viewed on the dashboard
-        // totals and charts are calculated based on the month
-        public DateTime SelectedMonth { get; set; }
+    // month currently viewed on the dashboard
+    // totals and charts are calculated based on the month
+    public DateTime SelectedMonth { get; set; }
 
-        // High-level financial summary for selected month
-        // values calculated in controller
-        public decimal TotalIncome { get; set; }
-        public decimal TotalExpenses { get; set; }
-        public decimal Net { get; set; }
-        // Net = Income - Expenses
-        // Stored directly to avoid recalculating inside view
+    // high-level financial summary for selected month
+    // values calculated in controller
+    public decimal TotalIncome { get; set; }
+    public decimal TotalExpenses { get; set; }
 
-        // trend chart data for last 6 months
-        // lists used because chart libraries expect arrays of values
-        public List<string> MonthLabels { get; set; } = new();
-        // example: ["Sep", "Oct", "Nov", "Dec", "Jan", "Feb"]
+    // net = income - expenses
+    // stored directly to avoid recalculating inside view
+    public decimal Net { get; set; }
 
-        public List<decimal> IncomeSeries { get; set; } = new();
-        public List<decimal> ExpenseSeries { get; set; } = new();
-        // separate lists make it easy to plug into chart
+    // trend chart data for last 6 months
+    // lists used because chart libraries expect arrays of values
+    public List<string> MonthLabels { get; set; } = new();
+    // example: ["Sep", "Oct", "Nov", "Dec", "Jan", "Feb"]
 
-        // budget comp. rows per category
-        // supports showing budget vs. actual spending
-        public List<CategoryBudgetRow> CategoryBudgets { get; set; } = new();
+    public List<decimal> IncomeSeries { get; set; } = new();
+    public List<decimal> ExpenseSeries { get; set; } = new();
+    // separate lists make it easy to plug into chart
 
-        // Overall financial health score
-        // Int keeps it simple and easy to calculate from rules
-        public int HealthScore { get; set; }
+    // budget comparison rows per category
+    // supports showing budget vs actual spending
+    public List<CategoryBudgetRow> CategoryBudgets { get; set; } = new();
 
-        // Label version of health score for UI display
-        // Example: "Good", "Warning", "Critical"
-        public string HealthLabel { get; set; } = "OK";
-    }
+    // overall financial health score
+    // int keeps it simple and easy to calculate from rules
+    public int HealthScore { get; set; }
 
-    // Keeps category-specific calculations grouped together
-    public class CategoryBudgetRow
-    {
-        // name of category (ex: Groceries, Rent)
-        public string CategoryName { get; set; } = "";
+    // label version of health score for UI display
+    // example: OK, Warning, Critical
+    public string HealthLabel { get; set; } = "OK";
+}
 
-        // Budgeted amount for month
-        public decimal BudgetAmount { get; set; }
+// keeps category-specific calculations grouped together
+public class CategoryBudgetRow
+{
+    // name of category (ex: Groceries, Rent)
+    public string CategoryName { get; set; } = "";
 
-        // Actual amount spent in month
-        public decimal SpentAmount { get; set; }
+    // budgeted amount for month
+    public decimal BudgetAmount { get; set; }
 
-        // Percentage of budget used
-        // Calculated in controller so view displays it
-        public decimal PercentUsed { get; set; }
+    // actual amount spent in month
+    public decimal SpentAmount { get; set; }
 
-        // Status used for UI styling
-        // Example: OK, NearLimit, OverBudget
-        // Makes it easier to apply color logic in view
-        public string Status { get; set; } = "OK";
-    }
+    // percentage of budget used
+    // calculated in controller so view displays it
+    public decimal PercentUsed { get; set; }
+
+    // status used for UI styling
+    // example: OK, NearLimit, OverBudget
+    // makes it easier to apply color logic in view
+    public string Status { get; set; } = "OK";
 }

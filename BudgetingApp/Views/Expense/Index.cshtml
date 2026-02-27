@@ -1,57 +1,238 @@
+<!--
+Old version:
+- Simple table with all expenses
+- No filters, no search, no export
+- Required full page navigation to create
 
-@model IEnumerable<BudgetingApp.Models.Expense>
+New version:
+- Uses ViewModel to support filters and search
+- Export respects current filters
+- Quick Add modal (AJAX) without leaving page
+- Mobile-friendly layout (table desktop, cards mobile)
+-->
 
+@model BudgetingApp.Models.ViewModels.ExpenseIndexViewModel
 @{
     ViewData["Title"] = "Expenses";
 }
 
-<h1>Expenses</h1>
+<!-- Expenses page with filters, export, quick add, mobile layout -->
 
-<p>
-    <!-- Link to create a new expense -->
-    <a asp-action="Create" class="btn btn-primary">Create New Expense</a>
-</p>
+<div class="page-header">
+    <div>
+        <h1 class="h3 m-0">Expenses</h1>
+        <div class="text-muted small">Filter, search, quick add, export</div>
+    </div>
 
-<table class="table table-striped">
-    <thead>
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.Name)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Amount)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Date)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Category)
-            </th>
-            <th>Actions</th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var item in Model)
+    <div class="d-flex gap-2 flex-wrap">
+        <!-- Export using current filters -->
+        <a class="btn btn-outline-secondary"
+           asp-action="ExportCsv"
+           asp-route-from="@Model.From?.ToString("yyyy-MM-dd")"
+           asp-route-to="@Model.To?.ToString("yyyy-MM-dd")"
+           asp-route-categoryId="@Model.CategoryId"
+           asp-route-minAmount="@Model.MinAmount"
+           asp-route-maxAmount="@Model.MaxAmount"
+           asp-route-search="@Model.Search">
+            Export CSV
+        </a>
+
+        <!-- Open quick add modal -->
+        <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#quickAddModal">
+            + Quick Add
+        </button>
+
+        <!-- Full create page -->
+        <a class="btn btn-outline-primary" asp-action="Create">Full Create</a>
+    </div>
+</div>
+
+<!-- Filter form -->
+<form method="get" class="card shadow-sm ui-card mb-3">
+    <div class="card-body">
+        <div class="row g-2">
+            <div class="col-6 col-md-2">
+                <label class="form-label small">From</label>
+                <input type="date" name="from" class="form-control" value="@Model.From?.ToString("yyyy-MM-dd")" />
+            </div>
+
+            <div class="col-6 col-md-2">
+                <label class="form-label small">To</label>
+                <input type="date" name="to" class="form-control" value="@Model.To?.ToString("yyyy-MM-dd")" />
+            </div>
+
+            <div class="col-12 col-md-3">
+                <label class="form-label small">Category</label>
+                <select class="form-select" name="categoryId">
+                    <option value="">All</option>
+                    @foreach (var opt in Model.CategoryOptions)
+                    {
+                        <option value="@opt.Value" selected="@(opt.Value == Model.CategoryId?.ToString())">@opt.Text</option>
+                    }
+                </select>
+            </div>
+
+            <div class="col-6 col-md-2">
+                <label class="form-label small">Min</label>
+                <input type="number" step="0.01" name="minAmount" class="form-control" value="@Model.MinAmount" />
+            </div>
+
+            <div class="col-6 col-md-2">
+                <label class="form-label small">Max</label>
+                <input type="number" step="0.01" name="maxAmount" class="form-control" value="@Model.MaxAmount" />
+            </div>
+
+            <div class="col-12 col-md-3">
+                <label class="form-label small">Search</label>
+                <input type="text" name="search" class="form-control" value="@Model.Search" placeholder="e.g. rent, gas" />
+            </div>
+
+            <div class="col-12 d-flex gap-2">
+                <!-- Apply filters -->
+                <button class="btn btn-dark">Apply</button>
+
+                <!-- Reset filters -->
+                <a class="btn btn-outline-secondary" asp-action="Index">Reset</a>
+            </div>
+        </div>
+    </div>
+</form>
+
+<!-- Desktop table layout -->
+<div class="d-none d-md-block">
+    <div class="card shadow-sm ui-card">
+        <div class="table-responsive">
+            <table class="table table-striped mb-0 align-middle">
+                <thead>
+                    <tr>
+                        <th>Date</th>
+                        <th>Name</th>
+                        <th>Category</th>
+                        <th class="text-end">Amount</th>
+                        <th class="text-end">Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                @foreach (var e in Model.Expenses)
+                {
+                    <tr>
+                        <td>@e.Date.ToString("yyyy-MM-dd")</td>
+                        <td>@e.Name</td>
+                        <td>@e.Category?.Name</td>
+                        <td class="text-end">$@e.Amount.ToString("0.00")</td>
+                        <td class="text-end">
+                            <!-- Row actions -->
+                            <a class="btn btn-sm btn-outline-primary" asp-action="Edit" asp-route-id="@e.ExpenseId">Edit</a>
+                            <a class="btn btn-sm btn-outline-secondary" asp-action="Details" asp-route-id="@e.ExpenseId">Details</a>
+                            <a class="btn btn-sm btn-outline-danger" asp-action="Delete" asp-route-id="@e.ExpenseId">Delete</a>
+                        </td>
+                    </tr>
+                }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<!-- Mobile card layout -->
+<div class="d-md-none">
+    <div class="d-grid gap-2">
+        @foreach (var e in Model.Expenses)
         {
-            <tr>
-                <td>@item.Name</td>
+            <div class="card shadow-sm ui-card">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between">
+                        <div class="fw-semibold">@e.Name</div>
+                        <div class="fw-semibold">$@e.Amount.ToString("0.00")</div>
+                    </div>
+                    <div class="text-muted small">@e.Date.ToString("yyyy-MM-dd") • @e.Category?.Name</div>
 
-                <!-- Format amount as currency (e.g., $123.45) -->
-                <td>@String.Format("{0:C}", item.Amount)</td>
-
-                <!-- Format date nicely -->
-                <td>@item.Date.ToShortDateString()</td>
-
-                <!-- Safely access category name -->
-                <td>@item.Category?.Name</td>
-
-                <td>
-                    <!-- Action links -->
-                    <a asp-action="Edit" asp-route-id="@item.ExpenseId" class="btn btn-sm btn-warning">Edit</a>
-                    <a asp-action="Details" asp-route-id="@item.ExpenseId" class="btn btn-sm btn-info">Details</a>
-                    <a asp-action="Delete" asp-route-id="@item.ExpenseId" class="btn btn-sm btn-danger">Delete</a>
-                </td>
-            </tr>
+                    <!-- Mobile actions -->
+                    <div class="mt-2 d-flex gap-2">
+                        <a class="btn btn-sm btn-outline-primary" asp-action="Edit" asp-route-id="@e.ExpenseId">Edit</a>
+                        <a class="btn btn-sm btn-outline-secondary" asp-action="Details" asp-route-id="@e.ExpenseId">Details</a>
+                        <a class="btn btn-sm btn-outline-danger" asp-action="Delete" asp-route-id="@e.ExpenseId">Delete</a>
+                    </div>
+                </div>
+            </div>
         }
-    </tbody>
-</table>
+    </div>
+
+    <!-- Floating add button (mobile) -->
+    <button class="btn btn-primary ui-fab"
+            data-bs-toggle="modal" data-bs-target="#quickAddModal">
+        + Add
+    </button>
+</div>
+
+<!-- Quick Add modal -->
+<div class="modal fade" id="quickAddModal" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <form id="quickAddForm" asp-action="QuickAdd" method="post">
+        @Html.AntiForgeryToken()
+        <div class="modal-header">
+          <h5 class="modal-title">Quick Add Expense</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+        </div>
+        <div class="modal-body">
+          <!-- Quick add fields -->
+          <div class="mb-2">
+            <label class="form-label">Name</label>
+            <input class="form-control" name="Name" required maxlength="120" />
+          </div>
+          <div class="mb-2">
+            <label class="form-label">Amount</label>
+            <input class="form-control" name="Amount" type="number" step="0.01" required />
+          </div>
+          <div class="mb-2">
+            <label class="form-label">Date</label>
+            <input class="form-control" name="Date" type="date" required value="@DateTime.Today.ToString("yyyy-MM-dd")" />
+          </div>
+          <div class="mb-2">
+            <label class="form-label">Category</label>
+            <select class="form-select" name="CategoryId" required>
+              @foreach (var opt in Model.CategoryOptions)
+              {
+                  <option value="@opt.Value">@opt.Text</option>
+              }
+            </select>
+          </div>
+
+          <!-- Error message -->
+          <div class="text-danger small" id="quickAddError" style="display:none;"></div>
+        </div>
+        <div class="modal-footer">
+          <button class="btn btn-outline-secondary" type="button" data-bs-dismiss="modal">Cancel</button>
+          <button class="btn btn-primary" type="submit">Save</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+@section Scripts {
+<script>
+  // Handle quick add submit
+  document.getElementById("quickAddForm").addEventListener("submit", async (e) => {
+    e.preventDefault();
+
+    const form = e.target;
+    const data = new FormData(form);
+    const res = await fetch(form.action, { method: "POST", body: data });
+
+    const err = document.getElementById("quickAddError");
+
+    // Show error if save fails
+    if (!res.ok) {
+      err.style.display = "block";
+      err.textContent = "Could not save. Check fields and try again.";
+      return;
+    }
+
+    // Reload on success
+    err.style.display = "none";
+    location.reload();
+  });
+</script>
+}

@@ -1,3 +1,12 @@
+// Data/ApplicationDbContext.cs
+// Implements:
+//      Budgets
+//      Recurring expenses
+//      Money amounts stored as decimal(10,2) to avoid floating point issues and ensure proper formatting in SQL
+// Why:
+// EF core needs DBset to make tables properly    
+// Precision avoids rounding errors 
+// Unique index prevents duplicates
 
 
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
@@ -11,45 +20,34 @@ using BudgetingApp.Models;
 
 namespace BudgetingApp.Data
 {
-    // This class manages connection to database using EF Core. 
-    // Tracks models and turns them into database tables. 
-
-    public class ApplicationDbContext : IdentityDbContext // Inherits identity tables (users, roles, etc.)
+    public class ApplicationDbContext : IdentityDbContext
     {
-        // Constructor that takes DbContextOptions to pass options to base class.
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
-        : base(options)
-        {
-            // just chilling for now
-        }
+            : base(options) { }
 
-        // This line tells EF Core to create a table for the Expense Model.
-        public DbSet<Expense> Expenses { get; set; }
+        // Existing tables
+        public DbSet<Expense> Expenses { get; set; } = default!;
+        public DbSet<Category> Categories { get; set; } = default!;
+        public DbSet<Income> Incomes { get; set; } = default!;
 
-        // This line tells EF Core to create a table for the Category Model.
-        public DbSet<Category> Categories { get; set; }
+        // new tables
+        public DbSet<Budget> Budgets { get; set; } = default!;
+        public DbSet<RecurringExpense> RecurringExpenses { get; set; } = default!;
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
-{
-    base.OnModelCreating(modelBuilder); 
+        {
+            base.OnModelCreating(modelBuilder);
 
-    modelBuilder.Entity<Expense>()
-        .Property(e => e.Amount)
-        .HasPrecision(10, 2); // Total 10 digits, 2 after decimal
+            // Money precision
+            modelBuilder.Entity<Expense>().Property(e => e.Amount).HasPrecision(10, 2);
+            modelBuilder.Entity<Income>().Property(i => i.Amount).HasPrecision(10, 2);
+            modelBuilder.Entity<Budget>().Property(b => b.Amount).HasPrecision(10, 2);
+            modelBuilder.Entity<RecurringExpense>().Property(r => r.Amount).HasPrecision(10, 2);
 
-    modelBuilder.Entity<Income>()
-        .Property(i => i.Amount)
-        .HasPrecision(10, 2); // Total 10 digits, 2 after decimal
-}
-
-
-        // this line is for the income model
-public DbSet<Income> Incomes { get; set; }
-        // This line tells EF Core to create a table for the Income Model.
-
-        // This line tells EF Core to create a table for the Budget Model.
-        // public DbSet<Budget> Budgets { get; set; }
-
-        // Potential optional override method if you want to configure model further, later on.
+            // Prevent duplicates: only 1 budget per category per month
+            modelBuilder.Entity<Budget>()
+                .HasIndex(b => new { b.CategoryId, b.Month })
+                .IsUnique();
+        }
     }
 }

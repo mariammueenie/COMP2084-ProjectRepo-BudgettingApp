@@ -1,0 +1,59 @@
+@model BudgetingApp.Models.Budget
+
+@{
+    ViewData["Title"] = "Edit Budget";
+}
+
+<div class="page-header">
+    <div>
+        <h1 class="h3 m-0">Edit Budget</h1>
+        <div class="text-muted small">Update the budget amount or category</div>
+    </div>
+    <a class="btn btn-outline-secondary" asp-action="Index" asp-route-month="@Model.Month">Back</a>
+</div>
+
+<div class="card shadow-sm ui-card">
+    <div class="card-body">
+        <form asp-action="Edit" method="post">
+            <input type="hidden" asp-for="BudgetId" />
+
+            <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
+
+            <!-- Month -->
+            <div class="mb-3">
+                <label asp-for="Month" class="form-label"></label>
+                <input type="month"         class="form-control"             
+                name="Month"                 
+                value="@Model.Month.ToString("yyyy-MM")" />
+                <span asp-validation-for="Month" class="text-danger"></span>
+            </div>
+
+            <!-- Category -->
+            <div class="mb-3">
+                <label asp-for="CategoryId" class="form-label">Category</label>
+                <select asp-for="CategoryId" class="form-select" asp-items="ViewBag.CategoryId">
+                    <option value="">-- Select a category --</option>
+                </select>
+                <span asp-validation-for="CategoryId" class="text-danger"></span>
+            </div>
+
+            <!-- Amount -->
+            <div class="mb-3">
+                <label asp-for="Amount" class="form-label"></label>
+                <input asp-for="Amount" class="form-control" inputmode="decimal" />
+                <span asp-validation-for="Amount" class="text-danger"></span>
+            </div>
+
+            <div class="d-flex gap-2">
+                <button type="submit" class="btn btn-primary">Save</button>
+                <a class="btn btn-outline-secondary" asp-action="Index" asp-route-month="@Model.Month">Cancel</a>
+            </div>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

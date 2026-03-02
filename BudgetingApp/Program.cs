@@ -71,76 +71,59 @@ if (!string.IsNullOrWhiteSpace(googleId) && !string.IsNullOrWhiteSpace(googleSec
 
 var app = builder.Build();
 
-// TEMP TO MAKE SURE DB IS CREATED
-using (var scope = app.Services.CreateScope())
+if (app.Environment.IsDevelopment())
 {
-    var db = scope.ServiceProvider.GetRequiredService<BudgetingApp.Data.ApplicationDbContext>();
-    db.Database.Migrate();
-}
-
-
-// TEMPORARY
-// ===== SEED ROLES + ADMIN USER ON STARTUP =====
-await using (var scope = app.Services.CreateAsyncScope())
-{
-    var services = scope.ServiceProvider;
-
-    try
+    using (var scope = app.Services.CreateScope())
     {
-        var roleManager = services.GetRequiredService<RoleManager<IdentityRole>>();
-        var userManager = services.GetRequiredService<UserManager<IdentityUser>>();
+        var db = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
+        db.Database.Migrate();
+    }
 
-        // Ensure roles exist
-        string[] roles = new[] { "Admin", "Customer" };
-        foreach (var roleName in roles)
+    await using (var scope = app.Services.CreateAsyncScope())
+    {
+        var services = scope.ServiceProvider;
+
+        try
         {
-            if (!await roleManager.RoleExistsAsync(roleName))
+            var roleManager = services.GetRequiredService<RoleManager<IdentityRole>>();
+            var userManager = services.GetRequiredService<UserManager<IdentityUser>>();
+
+            string[] roles = new[] { "Admin", "Customer" };
+
+            foreach (var roleName in roles)
             {
-                var r = await roleManager.CreateAsync(new IdentityRole(roleName));
-                if (!r.Succeeded)
+                if (!await roleManager.RoleExistsAsync(roleName))
                 {
-                    throw new Exception("Failed creating role '" + roleName + "': " +
-                        string.Join("; ", r.Errors.Select(e => e.Description)));
+                    await roleManager.CreateAsync(new IdentityRole(roleName));
                 }
             }
-        }
 
-        // Ensure admin user exists
-        var adminEmail = "dario@gc.ca";
-        var adminUser = await userManager.FindByEmailAsync(adminEmail);
-        if (adminUser == null)
-        {
-            adminUser = new IdentityUser
-            {
-                UserName = adminEmail,
-                Email = adminEmail,
-                EmailConfirmed = true
-            };
+            var adminEmail = "dario@gc.ca";
+            var adminUser = await userManager.FindByEmailAsync(adminEmail);
 
-            var create = await userManager.CreateAsync(adminUser, "Test123$");
-            if (!create.Succeeded)
+            if (adminUser == null)
             {
-                throw new Exception("Failed creating admin user: " +
-                    string.Join("; ", create.Errors.Select(e => e.Description)));
+                adminUser = new IdentityUser
+                {
+                    UserName = adminEmail,
+                    Email = adminEmail,
+                    EmailConfirmed = true
+                };
+
+                await userManager.CreateAsync(adminUser, "Test123$");
             }
-        }
 
-        // Ensure admin is in Admin role
-        if (!await userManager.IsInRoleAsync(adminUser, "Admin"))
-        {
-            var addRole = await userManager.AddToRoleAsync(adminUser, "Admin");
-            if (!addRole.Succeeded)
+            if (!await userManager.IsInRoleAsync(adminUser!, "Admin"))
             {
-                throw new Exception("Failed adding admin to role: " +
-                    string.Join("; ", addRole.Errors.Select(e => e.Description)));
+                await userManager.AddToRoleAsync(adminUser!, "Admin");
             }
-        }
 
-        Console.WriteLine("✅ Seed complete: roles + dario@gc.ca (Admin).");
-    }
-    catch (Exception ex)
-    {
-        Console.WriteLine("❌ Seed error: " + ex.Message);
+            Console.WriteLine("Seed complete.");
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine("Seed error: " + ex.Message);
+        }
     }
 }
 // ===== END SEED =====

@@ -1,0 +1,34 @@
+@model BudgetingApp.Models.Budget
+@using System.Globalization
+
+@{
+    ViewData["Title"] = "Budget Details";
+}
+
+<div class="page-header">
+    <div>
+        <h1 class="h3 m-0">Budget Details</h1>
+        <div class="text-muted small">View this budget entry</div>
+    </div>
+    <a class="btn btn-outline-secondary" asp-action="Index" asp-route-month="@Model.Month">Back</a>
+</div>
+
+<div class="card shadow-sm ui-card">
+    <div class="card-body">
+        <dl class="row mb-0">
+            <dt class="col-sm-3">Month</dt>
+            <dd class="col-sm-9">@Model.Month.ToString("MMMM yyyy")</dd>
+
+            <dt class="col-sm-3">Category</dt>
+            <dd class="col-sm-9">@Model.Category?.Name</dd>
+
+            <dt class="col-sm-3">Amount</dt>
+            <dd class="col-sm-9">@Model.Amount.ToString("C", CultureInfo.CurrentCulture)</dd>
+        </dl>
+    </div>
+
+    <div class="card-footer bg-transparent d-flex gap-2 justify-content-end">
+        <a class="btn btn-outline-secondary" asp-action="Edit" asp-route-id="@Model.BudgetId">Edit</a>
+        <a class="btn btn-outline-danger" asp-action="Delete" asp-route-id="@Model.BudgetId">Delete</a>
+    </div>
+</div>

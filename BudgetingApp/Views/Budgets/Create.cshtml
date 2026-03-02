@@ -1,0 +1,68 @@
+@model BudgetingApp.Models.Budget
+
+@{
+    ViewData["Title"] = "Create Budget";
+
+    // Default month from controller (first day of current month)
+    var defaultMonth = ViewBag.DefaultMonth as DateTime?
+        ?? new DateTime(DateTime.Today.Year, DateTime.Today.Month, 1);
+
+    // Safe month value for the <input type="month">
+    var monthValue = (Model == null || Model.Month == default(DateTime))
+        ? defaultMonth.ToString("yyyy-MM")
+        : Model.Month.ToString("yyyy-MM");
+}
+
+<div class="page-header">
+    <div>
+        <h1 class="h3 m-0">Create Budget</h1>
+        <div class="text-muted small">Set a monthly budget for a category</div>
+    </div>
+    <a class="btn btn-outline-secondary" asp-action="Index">Back</a>
+</div>
+
+<div class="card shadow-sm ui-card">
+    <div class="card-body">
+        <form asp-action="Create" method="post">
+            <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
+
+            <!--Month-->
+            <div class="mb-3">
+                <label asp-for="Month" class="form-label"></label>
+
+                <input type="month"      class="form-control"    name="Month"   value="@monthValue" />
+
+                <div class="form-text">Budgets are stored as the first day of the selected month.</div>
+                <span asp-validation-for="Month" class="text-danger"></span>
+            </div>
+
+            <!-- Category -->
+            <div class="mb-3">
+                <label asp-for="CategoryId" class="form-label">Category</label>
+                <select asp-for="CategoryId" class="form-select" asp-items="ViewBag.CategoryId">
+                    <option value="">-- Select a category --</option>
+                </select>
+                <span asp-validation-for="CategoryId" class="text-danger"></span>
+            </div>
+
+            <!-- Amount -->
+            <div class="mb-3">
+                <label asp-for="Amount" class="form-label"></label>
+                <input asp-for="Amount" class="form-control" inputmode="decimal" />
+                <div class="form-text">Example: 500.00</div>
+                <span asp-validation-for="Amount" class="text-danger"></span>
+            </div>
+
+            <div class="d-flex gap-2">
+                <button type="submit" class="btn btn-primary">Create</button>
+                <a class="btn btn-outline-secondary" asp-action="Index">Cancel</a>
+            </div>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

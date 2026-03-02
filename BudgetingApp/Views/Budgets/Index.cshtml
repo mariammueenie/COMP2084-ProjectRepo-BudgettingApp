@@ -1,0 +1,77 @@
+@model IEnumerable<BudgetingApp.Models.Budget>
+@using System.Globalization
+
+@{
+    ViewData["Title"] = "Budgets";
+
+    // Controller sets this in ViewBag.SelectedMonth
+    var selectedMonth = ViewBag.SelectedMonth as DateTime? ?? new DateTime(DateTime.Today.Year, DateTime.Today.Month, 1);
+}
+
+<div class="page-header">
+    <div>
+        <h1 class="h3 m-0">Budgets</h1>
+        <div class="text-muted small">Monthly budgets by category</div>
+    </div>
+
+    <div class="d-flex gap-2 align-items-center">
+        <!-- Month filter: submits as querystring ?month=YYYY-MM-01 -->
+        <form method="get" class="d-flex gap-2 align-items-center">
+            <input type="month"     name="month"           class="form-control"                  value="@selectedMonth.ToString("yyyy-MM")" />
+            <button class="btn btn-outline-secondary" type="submit">Go</button>
+        </form>
+
+        <a class="btn btn-primary" asp-action="Create">+ New Budget</a>
+    </div>
+</div>
+
+<div class="card shadow-sm ui-card">
+    <div class="card-body pb-2">
+        <div class="text-muted small">
+            Showing: <span class="fw-semibold">@selectedMonth.ToString("MMMM yyyy")</span>
+        </div>
+    </div>
+
+    <div class="table-responsive">
+        <table class="table table-striped mb-0">
+            <thead>
+                <tr>
+                    <th>Category</th>
+                    <th class="text-end">Amount</th>
+                    <th class="text-end">Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                @if (!Model.Any())
+                {
+                    <tr>
+                        <td colspan="3" class="text-center text-muted py-4">
+                            No budgets found for @selectedMonth.ToString("MMMM yyyy").
+                            <div class="mt-2">
+                                <a class="btn btn-sm btn-primary" asp-action="Create">Create your first budget</a>
+                            </div>
+                        </td>
+                    </tr>
+                }
+                else
+                {
+                    foreach (var b in Model)
+                    {
+                        <tr>
+                            <td class="fw-semibold">@b.Category?.Name</td>
+                            <td class="text-end">@b.Amount.ToString("C", CultureInfo.CurrentCulture)</td>
+                            <td class="text-end">
+                                <a class="btn btn-sm btn-outline-secondary" asp-action="Edit"
+                                   asp-route-id="@b.BudgetId">Edit</a>
+                                <a class="btn btn-sm btn-outline-secondary" asp-action="Details"
+                                   asp-route-id="@b.BudgetId">Details</a>
+                                <a class="btn btn-sm btn-outline-danger" asp-action="Delete"
+                                   asp-route-id="@b.BudgetId">Delete</a>
+                            </td>
+                        </tr>
+                    }
+                }
+            </tbody>
+        </table>
+    </div>
+</div>

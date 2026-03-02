@@ -1,0 +1,159 @@
+@model BudgetingApp.Models.ViewModels.DashboardViewModel
+@{
+    ViewData["Title"] = "Dashboard";
+}
+<!--
+Dashboard page
+Displays monthly income, expenses, and net
+Includes 6 month trend chart and budget progress bars
+-->
+<!--
+UX choices:
+- Responsive card grid
+- Clear status indicators (NearLimit/OverBudget)
+- Month picker to navigate time quickly
+-->
+
+<div class="page-header">
+    <div>
+        <h1 class="h3 m-0">Dashboard</h1>
+        <div class="text-muted small">Overview for @Model.SelectedMonth.ToString("MMMM yyyy")</div>
+    </div>
+
+    <form method="get" class="d-flex gap-2 align-items-center">
+        <!-- Month input posts yyyy-MM. Controller normalizes to yyyy-MM-01. -->
+        <input type="month" name="month" class="form-control"       value="@Model.SelectedMonth.ToString("yyyy-MM")" />
+        <button class="btn btn-primary">Go</button>
+    </form>
+</div>
+
+<div class="row g-3 mb-3">
+    <div class="col-12 col-md-4">
+        <div class="card shadow-sm ui-card">
+            <div class="card-body">
+                <div class="text-muted">Income</div>
+                <div class="display-6">$@Model.TotalIncome.ToString("0.00")</div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-12 col-md-4">
+        <div class="card shadow-sm ui-card">
+            <div class="card-body">
+                <div class="text-muted">Expenses</div>
+                <div class="display-6">$@Model.TotalExpenses.ToString("0.00")</div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-12 col-md-4">
+        <div class="card shadow-sm ui-card">
+            <div class="card-body">
+                <div class="text-muted">Net</div>
+                <div class="display-6 @(Model.Net < 0 ? "text-danger" : "text-success")">
+                    $@Model.Net.ToString("0.00")
+                </div>
+
+                <!-- 4B health score -->
+                <div class="mt-2 d-flex gap-2 flex-wrap">
+                    <span class="badge bg-dark">Health: @Model.HealthScore/100</span>
+                    <span class="badge bg-secondary">@Model.HealthLabel</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row g-3">
+    <div class="col-12 col-lg-6">
+        <div class="card shadow-sm ui-card">
+            <div class="card-body">
+                <h2 class="h5">6-Month Trend</h2>
+                <div class="text-muted small mb-2">Income vs Expenses</div>
+                <canvas id="trendChart" height="180"></canvas>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-12 col-lg-6">
+        <div class="card shadow-sm ui-card">
+            <div class="card-body">
+                <h2 class="h5">Budget vs Actual</h2>
+                <div class="text-muted small mb-2">Warnings when near 85% or over 100%</div>
+
+                @if (!Model.CategoryBudgets.Any())
+                {
+                    <div class="text-muted">No categories available.</div>
+                }
+                else
+                {
+                    foreach (var row in Model.CategoryBudgets)
+                    {
+                        var barClass =
+                            row.Status == "OverBudget" ? "bg-danger" :
+                            row.Status == "NearLimit" ? "bg-warning" :
+                            "bg-success";
+
+                        <div class="mb-3">
+                            <div class="d-flex justify-content-between flex-wrap gap-1">
+                                <div class="fw-semibold">@row.CategoryName</div>
+                                <div class="text-muted">
+                                    $@row.SpentAmount.ToString("0.00") / $@row.BudgetAmount.ToString("0.00")
+                                </div>
+                            </div>
+
+                            <div class="progress" style="height: 10px;">
+                                <div class="progress-bar @barClass"                         role="progressbar"
+                                     style="width:@row.PercentUsed.ToString("0")%"></div>
+                            </div>
+
+                            @if (row.Status == "OverBudget")
+                            {
+                                <div class="small text-danger mt-1">Over budget</div>
+                            }
+                            else if (row.Status == "NearLimit")
+                            {
+                                <div class="small text-warning mt-1">Near limit</div>
+                            }
+                        </div>
+                    }
+                }
+
+                <div class="mt-2 d-flex gap-2 flex-wrap">
+                    <a class="btn btn-outline-primary btn-sm" asp-controller="Budget" asp-action="Index">Manage
+                        Budgets</a>
+                        <a class="btn btn-outline-secondary btn-sm" asp-controller="RecurringExpense"
+                           asp-action="Index">Recurring</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    @section Scripts {
+        <!-- Chart.js for 2B trend chart -->
+        <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+        <script>
+            const labels = @Html.Raw(System.Text.Json.JsonSerializer.Serialize(Model.MonthLabels));
+            const income = @Html.Raw(System.Text.Json.JsonSerializer.Serialize(Model.IncomeSeries));
+            const expenses = @Html.Raw(System.Text.Json.JsonSerializer.Serialize(Model.ExpenseSeries));
+
+            const ctx = document.getElementById("trendChart");
+            new Chart(ctx, {
+            type: "line",
+            data: {
+            labels,
+            datasets: [
+            { label: "Income", data: income, tension: 0.25 },
+            { label: "Expenses", data: expenses, tension: 0.25 }
+            ]
+            },
+            options: {
+            responsive: true,
+            plugins: { legend: { position: "bottom" } },
+            scales: { y: { beginAtZero: true } }
+            }
+            });
+        </script>
+    }

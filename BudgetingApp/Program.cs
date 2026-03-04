@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Identity; 
 using BudgetingApp.Data;
+using System;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -10,9 +11,15 @@ builder.Services.AddControllersWithViews();
 
 // Register ApplicationDbContext with EF Core and SQL Server.
 // (uses connection string from app settings.json)
+// ensures non-failure if db does not work on first try
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
-    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
-
+    options.UseSqlServer(
+        builder.Configuration.GetConnectionString("DefaultConnection"),
+        sql => sql.EnableRetryOnFailure(
+            maxRetryCount: 5,
+            maxRetryDelay: TimeSpan.FromSeconds(10),
+            errorNumbersToAdd: null
+        )));
 // Identity configuration for user authentication.
 builder.Services 
     .AddDefaultIdentity<IdentityUser>(options =>
@@ -75,8 +82,16 @@ if (app.Environment.IsDevelopment())
 {
     using (var scope = app.Services.CreateScope())
     {
-        var db = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
-        db.Database.Migrate();
+         try
+{
+    // prevents whole app from dying when azure sql returns 4013 (DB not avail.)
+    var db = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
+    db.Database.Migrate();
+    }
+    catch (Exception ex)
+    {
+        app.Logger.LogError(ex, "Database migration failed during startup.");
+    }
     }
 
     await using (var scope = app.Services.CreateAsyncScope())

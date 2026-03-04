@@ -52,8 +52,15 @@ namespace BudgetingApp.Controllers
 
         // shows create form
         // includes category dropdown
-        public async Task<IActionResult> Create()
+        public IActionResult Create()
         {
+            // if there are no categories, we can't create a recurring expense
+            if (!_context.Categories.Any())
+            {
+                TempData["Error"] = "Create at least one Category before adding recurring expenses.";
+                return RedirectToAction("Create", "Category");
+            }
+
             ViewData["CategoryId"] = new SelectList(
                 _context.Categories.OrderBy(c => c.Name),
                 "CategoryId",
@@ -66,8 +73,15 @@ namespace BudgetingApp.Controllers
         // handles create submit
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("RecurringExpenseId,Name,Amount,Interval,NextOccurrenceDate,EndDate,IsActive,CategoryId")] RecurringExpense item)
+        public IActionResult Create([Bind("RecurringExpenseId,Name,Amount,Interval,NextOccurrenceDate,EndDate,IsActive,CategoryId")] RecurringExpense item)
         {
+            // if there are no categories, we can't create a recurring expense
+            if (!_context.Categories.Any())
+            {
+                TempData["Error"] = "Create at least one Category before adding recurring expenses.";
+                return RedirectToAction("Create", "Category");
+            }
+
             if (!ModelState.IsValid)
             {
                 ViewData["CategoryId"] = new SelectList(
@@ -80,7 +94,7 @@ namespace BudgetingApp.Controllers
             }
 
             _context.Add(item);
-            await _context.SaveChangesAsync();
+            _context.SaveChanges();
             return RedirectToAction(nameof(Index));
         }
 
@@ -91,6 +105,13 @@ namespace BudgetingApp.Controllers
 
             var item = await _context.RecurringExpenses.FindAsync(id);
             if (item == null) return NotFound();
+
+            // if there are no categories, we can't edit a recurring expense
+            if (!_context.Categories.Any())
+            {
+                TempData["Error"] = "Create at least one Category before editing recurring expenses.";
+                return RedirectToAction("Create", "Category");
+            }
 
             ViewData["CategoryId"] = new SelectList(
                 _context.Categories.OrderBy(c => c.Name),

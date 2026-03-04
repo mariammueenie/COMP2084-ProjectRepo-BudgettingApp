@@ -35,17 +35,6 @@ namespace BudgetingApp.Data
             // ----------------------------------
 
             // TODO: FIX THIS UP
-            builder.Entity<Expense>().HasData(
-            new Expense
-            {
-                ExpenseId = 1001,
-                Name = "Rent",
-                Amount = 800.00m,
-                Date = new DateTime(2026, 3, 4),
-                CategoryId = 1
-                // NO Category navigation property here
-            }
-        );
            
                 
 

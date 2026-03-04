@@ -167,23 +167,33 @@ The database is managed using **Entity Framework Core migrations**.
 ## Running the Project Locally
 
 Clone the repository: 
+```
 git clone https://github.com/mariammueenie/COMP2084-ProjectRepo-BudgettingApp
-
+```
 Navigate to the project folder:
+```
 cd BudgetingApp
-
+```
 
 Restore dependencies:
+```
 dotnet restore
+```
 
 Apply migrations:
+```
 dotnet ef database update
+```
 
 Run the application:
+```
 dotnet run
+```
 
 Open the application in your browser:
+```
 https://localhost:xxxx
+```
 
 ---
 

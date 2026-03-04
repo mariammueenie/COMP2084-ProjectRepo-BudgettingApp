@@ -117,7 +117,7 @@ Views   ApplicationDbContext
  ---
 
 ## Project Structure
-###
+'''text
 BudgetingApp
 │
 ├── Controllers
@@ -147,7 +147,7 @@ BudgetingApp
 │ └── RecurringExpense
 │
 └── wwwroot
-###
+'''text
 ---
 
 ## Database Design

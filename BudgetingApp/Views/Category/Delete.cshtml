@@ -1,0 +1,41 @@
+@model BudgetingApp.Models.Category
+
+@{
+    ViewData["Title"] = "Delete Category";
+}
+
+<div class="page-header">
+    <div>
+        <h1 class="h3 m-0">Delete Category</h1>
+        <div class="text-muted small">Confirm removal</div>
+    </div>
+    <a class="btn btn-outline-secondary" asp-action="Index">Back</a>
+</div>
+
+<div class="card shadow-sm ui-card border border-danger-subtle">
+    <div class="card-body">
+        <div class="alert alert-danger mb-3">
+            <strong>Warning:</strong> Deleting this category will permanently remove:
+            <ul class="mb-0">
+                <li>All budgets linked to this category</li>
+                <li>All recurring expenses linked to this category</li>
+                <li>All expenses linked to this category</li>
+            </ul>
+            This action cannot be undone.
+        </div>
+
+        <dl class="row mb-0">
+            <dt class="col-sm-3">Name</dt>
+            <dd class="col-sm-9">@Model.Name</dd>
+        </dl>
+
+        <form asp-action="Delete" method="post" class="mt-3">
+            <input type="hidden" asp-for="CategoryId" />
+
+            <div class="d-flex gap-2">
+                <button type="submit" class="btn btn-danger">Delete</button>
+                <a class="btn btn-outline-secondary" asp-action="Index">Cancel</a>
+            </div>
+        </form>
+    </div>
+</div>

@@ -2,6 +2,20 @@
 @{
     ViewData["Title"] = "Dashboard";
 }
+
+<!--To ensure empty DB does not throw Dashboard errors-->
+@if (!Model.HasAnyData)
+{
+    <div class="alert alert-info">
+        <strong>Welcome!</strong> Your dashboard will populate once you add at least one category, income, or expense.
+        <div class="mt-2 d-flex gap-2 flex-wrap">
+            <a class="btn btn-primary btn-sm" asp-controller="Category" asp-action="Index">Set up Categories</a>
+            <a class="btn btn-outline-primary btn-sm" asp-controller="Income" asp-action="Create">Add Income</a>
+            <a class="btn btn-outline-primary btn-sm" asp-controller="Expense" asp-action="Create">Add Expense</a>
+        </div>
+    </div>
+}
+
 <!--
 Dashboard page
 Displays monthly income, expenses, and net
@@ -120,7 +134,7 @@ UX choices:
                 }
 
                 <div class="mt-2 d-flex gap-2 flex-wrap">
-                    <a class="btn btn-outline-primary btn-sm" asp-controller="Budget" asp-action="Index">Manage
+                    <a class="btn btn-outline-primary btn-sm" asp-controller="Budgets" asp-action="Index">Manage
                         Budgets</a>
                         <a class="btn btn-outline-secondary btn-sm" asp-controller="RecurringExpense"
                            asp-action="Index">Recurring</a>

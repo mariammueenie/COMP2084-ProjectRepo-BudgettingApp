@@ -34,39 +34,10 @@ namespace BudgetingApp.Data
             // Seed demo data for first run
             // ----------------------------------
 
-            builder.Entity<Category>().HasData(
-                new Category { CategoryId = 1, Name = "Food" },
-                new Category { CategoryId = 2, Name = "Rent" },
-                new Category { CategoryId = 3, Name = "Transportation" }
-            );
+            // TODO: FIX THIS UP
 
-            builder.Entity<Income>().HasData(
-                new Income
-                {
-                    IncomeId = 1,
-                    Amount = 3200,
-                    Date = new DateTime(2026, 3, 1)
-                }
-            );
-
-            builder.Entity<Expense>().HasData(
-                new Expense
-                {
-                    ExpenseId = 1,
-                    Name = "Groceries",
-                    Amount = 120,
-                    Date = new DateTime(2026, 3, 2),
-                    CategoryId = 1
-                },
-                new Expense
-                {
-                    ExpenseId = 2,
-                    Name = "Bus Pass",
-                    Amount = 90,
-                    Date = new DateTime(2026, 3, 3),
-                    CategoryId = 3
-                }
-            );
+           
+                
 
             // ----------------------------------
             // Money precision rules

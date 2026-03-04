@@ -1,0 +1,45 @@
+@model BudgetingApp.Models.RecurringExpense
+
+@{
+    ViewData["Title"] = "Recurring Expense Details";
+}
+
+<div class="page-header">
+    <div>
+        <h1 class="h3 m-0">Recurring Expense Details</h1>
+        <div class="text-muted small">Review schedule and settings</div>
+    </div>
+    <a class="btn btn-outline-secondary" asp-action="Index">Back</a>
+</div>
+
+<div class="card shadow-sm ui-card">
+    <div class="card-body">
+        <dl class="row mb-0">
+            <dt class="col-sm-3">Name</dt>
+            <dd class="col-sm-9">@Model.Name</dd>
+
+            <dt class="col-sm-3">Category</dt>
+            <dd class="col-sm-9">@Model.Category?.Name</dd>
+
+            <dt class="col-sm-3">Amount</dt>
+            <dd class="col-sm-9">@Model.Amount.ToString("C")</dd>
+
+            <dt class="col-sm-3">Interval</dt>
+            <dd class="col-sm-9">@Model.Interval</dd>
+
+            <dt class="col-sm-3">Next Occurrence</dt>
+            <dd class="col-sm-9">@Model.NextOccurrenceDate.ToString("yyyy-MM-dd")</dd>
+
+            <dt class="col-sm-3">End Date</dt>
+            <dd class="col-sm-9">@((Model.EndDate.HasValue) ? Model.EndDate.Value.ToString("yyyy-MM-dd") : "None")</dd>
+
+            <dt class="col-sm-3">Active</dt>
+            <dd class="col-sm-9">@((Model.IsActive) ? "Yes" : "No")</dd>
+        </dl>
+    </div>
+
+    <div class="card-footer bg-transparent d-flex gap-2 justify-content-end">
+        <a class="btn btn-outline-secondary" asp-action="Edit" asp-route-id="@Model.RecurringExpenseId">Edit</a>
+        <a class="btn btn-outline-danger" asp-action="Delete" asp-route-id="@Model.RecurringExpenseId">Delete</a>
+    </div>
+</div>

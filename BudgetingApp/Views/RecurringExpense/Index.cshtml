@@ -1,0 +1,76 @@
+@model IEnumerable<BudgetingApp.Models.RecurringExpense>
+
+@{
+    ViewData["Title"] = "Recurring Expenses";
+}
+
+<div class="page-header">
+    <div>
+        <h1 class="h3 m-0">Recurring Expenses</h1>
+        <div class="text-muted small">Scheduled expenses that repeat weekly or monthly</div>
+    </div>
+    <a class="btn btn-primary" asp-action="Create">+ New Recurring Expense</a>
+</div>
+
+<div class="card shadow-sm ui-card">
+    <div class="table-responsive">
+        <table class="table table-striped mb-0">
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Category</th>
+                    <th>Interval</th>
+                    <th>Next Occurrence</th>
+                    <th class="text-end">Amount</th>
+                    <th class="text-end">Status</th>
+                    <th class="text-end">Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                @if (!Model.Any())
+                {
+                    <tr>
+                        <td colspan="7" class="text-center text-muted py-4">
+                            No recurring expenses yet.
+                            <div class="mt-2">
+                                <a class="btn btn-sm btn-primary" asp-action="Create">Create your first recurring
+                                    expense</a>
+                                </div>
+                            </td>
+                        </tr>
+                    }
+            else
+                    {
+                        foreach (var r in Model)
+                        {
+                            <tr>
+                                <td class="fw-semibold">@r.Name</td>
+                                <td>@r.Category?.Name</td>
+                                <td>@r.Interval</td>
+                                <td>@r.NextOccurrenceDate.ToString("yyyy-MM-dd")</td>
+                                <td class="text-end">@r.Amount.ToString("C")</td>
+                                <td class="text-end">
+                                    @if (r.IsActive)
+                                    {
+                                        <span class="badge text-bg-success">Active</span>
+                                    }
+                                    else
+                                    {
+                                        <span class="badge text-bg-secondary">Paused</span>
+                                    }
+                                </td>
+                                <td class="text-end">
+                                    <a class="btn btn-sm btn-outline-secondary" asp-action="Edit"
+                                       asp-route-id="@r.RecurringExpenseId">Edit</a>
+                                    <a class="btn btn-sm btn-outline-secondary" asp-action="Details"
+                                       asp-route-id="@r.RecurringExpenseId">Details</a>
+                                    <a class="btn btn-sm btn-outline-danger" asp-action="Delete"
+                                       asp-route-id="@r.RecurringExpenseId">Delete</a>
+                                </td>
+                            </tr>
+                        }
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>

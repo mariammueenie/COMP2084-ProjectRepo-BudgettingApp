@@ -1,0 +1,86 @@
+@model BudgetingApp.Models.RecurringExpense
+@using BudgetingApp.Models
+
+@{
+    ViewData["Title"] = "Create Recurring Expense";
+
+    var defaultDate = new DateTime(DateTime.Today.Year, DateTime.Today.Month, DateTime.Today.Day);
+
+    // Safe default for date input (if model is null or default date)
+    var nextDateValue = (Model == null || Model.NextOccurrenceDate == default(DateTime))
+        ? defaultDate.ToString("yyyy-MM-dd")
+        : Model.NextOccurrenceDate.ToString("yyyy-MM-dd");
+}
+
+<div class="page-header">
+    <div>
+        <h1 class="h3 m-0">Create Recurring Expense</h1>
+        <div class="text-muted small">Set up an expense that repeats automatically</div>
+    </div>
+    <a class="btn btn-outline-secondary" asp-action="Index">Back</a>
+</div>
+
+<div class="card shadow-sm ui-card">
+    <div class="card-body">
+        <form asp-action="Create" method="post">
+            <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
+
+            <div class="mb-3">
+                <label asp-for="Name" class="form-label"></label>
+                <input asp-for="Name" class="form-control" />
+                <span asp-validation-for="Name" class="text-danger"></span>
+            </div>
+
+            <div class="mb-3">
+                <label asp-for="CategoryId" class="form-label"></label>
+                <select asp-for="CategoryId" class="form-select" asp-items="ViewBag.CategoryId">
+                    <option value="">-- Select a category --</option>
+                </select>
+                <span asp-validation-for="CategoryId" class="text-danger"></span>
+            </div>
+
+            <div class="mb-3">
+                <label asp-for="Amount" class="form-label"></label>
+                <input asp-for="Amount" class="form-control" inputmode="decimal" />
+                <span asp-validation-for="Amount" class="text-danger"></span>
+            </div>
+
+            <div class="mb-3">
+                <label asp-for="Interval" class="form-label"></label>
+                <select asp-for="Interval" class="form-select" asp-items="Html.GetEnumSelectList<RecurrenceInterval>()">
+                    <option value="">-- Select interval --</option>
+                </select>
+                <span asp-validation-for="Interval" class="text-danger"></span>
+            </div>
+
+            <div class="mb-3">
+                <label asp-for="NextOccurrenceDate" class="form-label"></label>
+                <input type="date" class="form-control" name="NextOccurrenceDate" value="@nextDateValue" />
+                <div class="form-text">This is the next date the expense will generate.</div>
+                <span asp-validation-for="NextOccurrenceDate" class="text-danger"></span>
+            </div>
+
+            <div class="mb-3">
+                <label asp-for="EndDate" class="form-label"></label>
+                <input asp-for="EndDate" class="form-control" />
+                <span asp-validation-for="EndDate" class="text-danger"></span>
+            </div>
+
+            <div class="form-check mb-3">
+                <input class="form-check-input" asp-for="IsActive" />
+                <label class="form-check-label" asp-for="IsActive"></label>
+            </div>
+
+            <div class="d-flex gap-2">
+                <button type="submit" class="btn btn-primary">Create</button>
+                <a class="btn btn-outline-secondary" asp-action="Index">Cancel</a>
+            </div>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

@@ -1,47 +1,99 @@
-html {
-  font-size: 14px;
-  font-family: Georgia, 'Times New Roman', Times, serif;
-  color: white;
-}
+/* Light SaaS theme (Bootstrap-safe) */
 
-@media (min-width: 768px) {
-  html {
-    font-size: 16px;
-  }
-}
-
-.btn:focus, .btn:active:focus, .btn-link.nav-link:focus, .form-control:focus, .form-check-input:focus {
-  box-shadow: 0 0 0 0.1rem black, 0 0 0 0.25rem #09223d;
+:root {
+  --app-bg: #f6f7fb;
+  --card-bg: #ffffff;
+  --text: #212529;
+  --muted: #6c757d;
+  --border: rgba(0, 0, 0, 0.08);
 }
 
 html {
-  position: relative;
-  min-height: 100%;
-  background-color: rgb(75, 75, 75);
+  font-size: 16px;
 }
 
 body {
-  margin-bottom: 60px;
+  font-family: system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
+  color: var(--text);
+  background: var(--app-bg);
+  margin: 0;
+  min-height: 100vh;
 }
 
-header, footer {
-  background-color: rgb(40, 40, 40);
-  border: 1px solid rgb(105, 105, 105);
+/* Keep layout consistent */
+.container {
+  max-width: 1100px;
 }
 
-/* Make footer stay at the bottom of the page */
-html, body {
-    height: 100%;
-    margin: 0;
-    padding: 0;
+/* Navbar polish */
+.navbar {
+  background: #fff !important;
 }
 
-body {
-    display: flex;
-    flex-direction: column;
-    min-height: 100vh;
+.navbar .nav-link {
+  font-weight: 500;
 }
 
-main {
-    flex: 1;
+/* Shared page header used across your pages */
+.page-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  margin: 0 0 1rem 0;
+}
+
+.page-header h1,
+.page-header .h3 {
+  letter-spacing: -0.02em;
+  line-height: 1.2;
+}
+
+/* Cards */
+.ui-card {
+  background: var(--card-bg);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+}
+
+/* Softer shadow than default */
+.shadow-sm {
+  box-shadow: 0 6px 20px rgba(16, 24, 40, 0.06) !important;
+}
+
+/* Tables */
+.table thead th {
+  color: var(--muted);
+  font-weight: 600;
+}
+
+/* Buttons: keep Bootstrap, just slightly rounded for SaaS feel */
+.btn {
+  border-radius: 10px;
+}
+
+/* Forms */
+.form-control,
+.form-select {
+  border-radius: 10px;
+}
+
+/* Focus ring: clean and consistent */
+.btn:focus,
+.btn:active:focus,
+.form-control:focus,
+.form-select:focus,
+.form-check-input:focus {
+  box-shadow: 0 0 0 0.15rem rgba(13, 110, 253, 0.25);
+}
+
+/* Calender formatting */
+input[type="date"],
+input[type="month"] {
+  border-radius: 10px;
+}
+
+input[type="date"],
+input[type="month"] {
+  border-radius: 10px;
 }

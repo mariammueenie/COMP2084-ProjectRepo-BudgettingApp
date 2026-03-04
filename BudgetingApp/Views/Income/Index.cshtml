@@ -1,14 +1,17 @@
 @model IEnumerable<BudgetingApp.Models.Income>
 
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "Income";
 }
 
-<h1>Index</h1>
+<div class="page-header">
+    <div>
+        <h1 class="h3 m-0">Income</h1>
+        <div class="text-muted small">Track money coming in</div>
+    </div>
+    <a class="btn btn-primary" asp-action="Create">+ New Income</a>
+</div>
 
-<p>
-    <a asp-action="Create">Create New</a>
-</p>
 <table class="table">
     <thead>
         <tr>

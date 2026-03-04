@@ -52,9 +52,10 @@ namespace BudgetingApp.Controllers
 
         // shows create form
         // includes category dropdown
-        public IActionResult Create()
+        public async Task<IActionResult> Create()
         {
             // if there are no categories, we can't create a recurring expense
+            var hasCategories = await _context.Categories.AnyAsync();
             if (!_context.Categories.Any())
             {
                 TempData["Error"] = "Create at least one Category before adding recurring expenses.";
@@ -73,9 +74,10 @@ namespace BudgetingApp.Controllers
         // handles create submit
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Create([Bind("RecurringExpenseId,Name,Amount,Interval,NextOccurrenceDate,EndDate,IsActive,CategoryId")] RecurringExpense item)
+        public async Task<IActionResult> Create([Bind("RecurringExpenseId,Name,Amount,Interval,NextOccurrenceDate,EndDate,IsActive,CategoryId")] RecurringExpense item)
         {
             // if there are no categories, we can't create a recurring expense
+            var hasCategories = await _context.Categories.AnyAsync();
             if (!_context.Categories.Any())
             {
                 TempData["Error"] = "Create at least one Category before adding recurring expenses.";
@@ -94,7 +96,9 @@ namespace BudgetingApp.Controllers
             }
 
             _context.Add(item);
-            _context.SaveChanges();
+            await _context.SaveChangesAsync();
+
+            TempData["Success"] = "Recurring expense created.";
             return RedirectToAction(nameof(Index));
         }
 

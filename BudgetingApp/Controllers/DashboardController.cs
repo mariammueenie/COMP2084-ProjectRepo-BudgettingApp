@@ -6,7 +6,6 @@
 using System; // need DateTime and Math helpers
 using System.Linq; // need Where, Select, OrderBy
 using System.Threading.Tasks; // need async Task
-using Microsoft.AspNetCore.Authorization; // need [Authorize]
 using Microsoft.AspNetCore.Mvc; // need Controller and IActionResult
 using Microsoft.EntityFrameworkCore; // need EF Core async queries like SumAsync and ToListAsync
 using BudgetingApp.Data; // need ApplicationDbContext
@@ -15,8 +14,6 @@ using BudgetingApp.Models.ViewModels; // need DashboardViewModel and CategoryBud
 
 namespace BudgetingApp.Controllers
 {
-    // Require login so the dashboard is tied to a user session (portfolio-standard security baseline)
-    [Authorize]
     public class DashboardController : Controller
     {
         // database context so controller can query and save data
@@ -59,7 +56,6 @@ namespace BudgetingApp.Controllers
                 .SumAsync(e => (decimal?)e.Amount) ?? 0m;
 
             // build the viewmodel for the dashboard
-            // IMPORTANT: initialize lists if your DashboardViewModel constructor doesn't already do it
             var vm = new DashboardViewModel
             {
                 SelectedMonth = selectedMonth,
@@ -80,12 +76,12 @@ namespace BudgetingApp.Controllers
                 // label for chart x axis
                 vm.MonthLabels.Add(m.ToString("MMM yyyy"));
 
-                // income for that month (empty-safe)
+                // income for that month
                 var incomeM = await _context.Incomes
                     .Where(x => x.Date >= s && x.Date < e)
                     .SumAsync(x => (decimal?)x.Amount) ?? 0m;
 
-                // expenses for that month (empty-safe)
+                // expenses for that month
                 var expenseM = await _context.Expenses
                     .Where(x => x.Date >= s && x.Date < e)
                     .SumAsync(x => (decimal?)x.Amount) ?? 0m;
@@ -97,31 +93,28 @@ namespace BudgetingApp.Controllers
 
             // budgets vs actual by category
             // ordered so table looks consistent every time
-            var categories = await _context.Categories
-                .OrderBy(c => c.Name)
-                .ToListAsync();
+            var categories = await _context.Categories.OrderBy(c => c.Name).ToListAsync();
 
             foreach (var cat in categories)
             {
-                // budget for this category in selected month (empty-safe)
+                // budget for this category in selected month
                 // default 0 if no budget is set
                 var budget = await _context.Budgets
-                    .Where(b => b.CategoryId == cat.CategoryId
-                        && b.Month >= monthStart
-                        && b.Month < monthEnd)
+                    .Where(b => b.CategoryId == cat.CategoryId && b.Month == selectedMonth)
                     .Select(b => (decimal?)b.Amount)
                     .FirstOrDefaultAsync() ?? 0m;
 
-                // total spent for this category in selected month (empty-safe)
+                // total spent for this category in selected month
                 var spent = await _context.Expenses
                     .Where(e => e.CategoryId == cat.CategoryId && e.Date >= monthStart && e.Date < monthEnd)
                     .SumAsync(e => (decimal?)e.Amount) ?? 0m;
 
                 // percent used for progress bar
-                // clamp to 100 so bar doesn't overflow in UI
+                // clamp to 100 so bar doesnt overflow in UI
                 var pct = budget <= 0 ? 0 : Math.Min(100m, (spent / budget) * 100m);
 
-                // status based on usage
+                // warnings based on budget usage
+                // 85 percent is a warning zone
                 var status = "OK";
                 if (budget > 0 && spent >= budget) status = "OverBudget";
                 else if (budget > 0 && spent >= budget * 0.85m) status = "NearLimit";
@@ -137,7 +130,7 @@ namespace BudgetingApp.Controllers
                 });
             }
 
-            // compute a simple health score (portfolio metric)
+            // compute a simple health score for portfolio dashboard metric
             vm.HealthScore = ComputeHealthScore(vm.TotalIncome, vm.TotalExpenses, vm.CategoryBudgets);
 
             // label for UI so score is understandable at a glance
@@ -162,7 +155,7 @@ namespace BudgetingApp.Controllers
             // savings rate = leftover income percentage
             var savingsRate = (income - expenses) / income;
 
-            // savingsPoints is capped so savings doesn't dominate the whole score
+            // savingsPoints is capped so savings doesnt dominate the whole score
             var savingsPoints = (int)Math.Clamp(savingsRate * 60m, 0m, 60m);
 
             // count how many categories are over or near budget
@@ -198,27 +191,16 @@ namespace BudgetingApp.Controllers
 
             foreach (var r in due)
             {
-                var recurringName = r.Name + " (Recurring)";
-
-                // check if this recurring expense was already generated
-                var alreadyExists = await _context.Expenses.AnyAsync(e =>
-                    e.Date == r.NextOccurrenceDate &&
-                    e.CategoryId == r.CategoryId &&
-                    e.Amount == r.Amount &&
-                    e.Name == recurringName);
-
-                if (!alreadyExists)
+                // create a real expense from template
+                _context.Expenses.Add(new Expense
                 {
-                    _context.Expenses.Add(new Expense
-                    {
-                        Name = recurringName,
-                        Amount = r.Amount,
-                        Date = r.NextOccurrenceDate,
-                        CategoryId = r.CategoryId
-                    });
-                }
+                    Name = r.Name + " (Recurring)",
+                    Amount = r.Amount,
+                    Date = r.NextOccurrenceDate,
+                    CategoryId = r.CategoryId
+                });
 
-                // move the next occurrence forward
+                // move the next occurrence forward based on interval
                 r.NextOccurrenceDate = r.Interval switch
                 {
                     RecurrenceInterval.Weekly => r.NextOccurrenceDate.AddDays(7),

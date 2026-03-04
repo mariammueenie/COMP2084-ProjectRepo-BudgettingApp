@@ -167,7 +167,7 @@ namespace BudgetingApp.Controllers
             return View(expense);
         }
 
-        public async Task<IActionResult> Create()
+        public IActionResult Create()
         {
             ViewData["CategoryId"] = new SelectList(_context.Categories, "CategoryId", "Name");
             return View();

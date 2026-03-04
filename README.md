@@ -117,7 +117,7 @@ Views   ApplicationDbContext
  ---
 
 ## Project Structure
-'''text
+'''
 BudgetingApp
 │
 ├── Controllers

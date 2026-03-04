@@ -5,7 +5,6 @@
 
 using System; // need DateTime
 using System.Collections.Generic; // need List collections
-using System.Linq; // need Any()
 
 namespace BudgetingApp.Models.ViewModels; // file-scoped namespace (C# 10+)
 
@@ -44,12 +43,6 @@ public class DashboardViewModel
     // label version of health score for UI display
     // example: OK, Warning, Critical
     public string HealthLabel { get; set; } = "OK";
-
-    // used by the view to safely show the empty-state message
-    public bool HasAnyData =>
-        TotalIncome != 0m ||
-        TotalExpenses != 0m ||
-        (CategoryBudgets != null && CategoryBudgets.Any());
 }
 
 // keeps category-specific calculations grouped together

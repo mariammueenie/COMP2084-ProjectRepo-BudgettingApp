@@ -231,7 +231,9 @@ Computer Programming Student
 Georgian College
 
 GitHub:  
+```
 https://github.com/mariammueenie
+```
 
 ---
 
